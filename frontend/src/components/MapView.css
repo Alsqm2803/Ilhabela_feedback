@@ -1,0 +1,20 @@
+.pin-marker {
+    width: 20px;
+    height: 20px;
+    background-color: red; /* Cor da cabeça do alfinete */
+    border-radius: 50%; /* Torna a cabeça do alfinete circular */
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .pin-marker::after {
+    content: '';
+    width: 2px;
+    height: 20px;
+    background-color: red; /* Cor da haste do alfinete */
+    position: absolute;
+    top: 20px; /* Posiciona a haste abaixo da cabeça */
+    left: 9px; /* Centraliza a haste */
+    border-radius: 1px;
+  }
+  
