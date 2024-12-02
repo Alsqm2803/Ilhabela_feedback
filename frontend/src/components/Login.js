@@ -18,16 +18,18 @@ function Login({ setIsLoggedIn }) {
       const response = await api.post('/auth/login', { email, senha });
       const token = response.data.token;
 
+      // Decodifica o token para obter o tempo de expiração
       const decodedToken = jwtDecode(token);
       localStorage.setItem('token', token);
-      localStorage.setItem('tokenExpiry', decodedToken.exp * 1000);
+      localStorage.setItem('tokenExpiry', decodedToken.exp * 1000); // Salva a expiração do token no localStorage
 
-      setAuthToken(token);
-      setIsLoggedIn(true);
+      setAuthToken(token); // Configura o token para futuras requisições
+      setIsLoggedIn(true); // Atualiza o estado global de autenticação
 
-      alert('Login bem-sucedido!');
+      navigate('/'); // Redireciona para a página principal
     } catch (error) {
-      alert('Erro ao fazer login');
+      const errorMessage = error.response?.data?.error || 'Erro ao fazer login';
+      alert(errorMessage);
     }
   };
 
@@ -65,7 +67,13 @@ function Login({ setIsLoggedIn }) {
             </div>
             <button type="submit" className="btn-login">Entrar</button>
           </form>
-          <a className="forgot-password" href="#">Esqueceu a senha?</a>
+          <a 
+            className="forgot-password" 
+            href="#"
+            onClick={() => navigate('/forgot-password')} // Redireciona para recuperação de senha
+          >
+            Esqueceu a senha?
+          </a>
         </div>
       </div>
     </div>

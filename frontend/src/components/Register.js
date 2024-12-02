@@ -11,20 +11,24 @@ function Register({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Tenta registrar o usuário
       await api.post('/auth/register', { nome, email, senha });
+
+      // Tenta fazer login automaticamente após registro
       const response = await api.post('/auth/login', { email, senha });
 
-      setAuthToken(response.data.token);
-      setIsLoggedIn(true);
-
+      setAuthToken(response.data.token); // Define o token de autenticação
+      setIsLoggedIn(true); // Atualiza o estado de login
+      navigate('/'); // Redireciona para a página principal
       alert('Registro e login bem-sucedidos!');
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "Erro ao registrar. Tente novamente mais tarde.";
-      alert(errorMessage);
+      const errorMessage = error.response?.data?.error || 'Erro ao registrar. Tente novamente mais tarde.';
+      setError(errorMessage);
     }
   };
 
@@ -72,6 +76,7 @@ function Register({ setIsLoggedIn }) {
             </div>
             <button type="submit" className="btn-login">Registrar</button>
           </form>
+          {error && <p className="error-message">{error}</p>}
         </div>
       </div>
     </div>

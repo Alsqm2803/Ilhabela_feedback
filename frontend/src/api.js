@@ -26,5 +26,5 @@ if (token) setAuthToken(token);
 export const createComment = (commentData) => api.post('/comments', commentData);
 export const getComments = () => api.get('/comments');
 export const getUserComments = () => api.get('/comments/user');
-
+export const getCommentsByBairro = () => api.get('/comments/comments-by-bairro'); 
 export default api;

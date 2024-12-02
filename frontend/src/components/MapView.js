@@ -13,8 +13,10 @@ const MapView = () => {
     latitude: null,
     longitude: null,
     tag: '',
-    text: ''
+    text: '',
+    bairro: '' 
   });
+  
   const [showForm, setShowForm] = useState(false);
   const markersRef = useRef([]); // Para armazenar referências aos marcadores
 
@@ -22,7 +24,7 @@ const MapView = () => {
 
   // Redirecionamento para a tela de comentários
   const handleCommentsPage = () => {
-    navigate('/comments-location');
+    navigate('/comments/comments-by-bairro');
   };
 
   // Redirecionamento para a tela de dashboard de estatísticas
@@ -105,6 +107,7 @@ const MapView = () => {
       const response = await api.post('/comments', {
         texto: newComment.text,
         tag: newComment.tag,
+        bairro: newComment.bairro,
         localizacao: {
           latitude: newComment.latitude,
           longitude: newComment.longitude
@@ -128,21 +131,21 @@ const MapView = () => {
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {/* Cabeçalho com botões de navegação */}
       <header className="moldura">
-        <h1>&nbsp;&nbsp;Mapa de Ilhabela
+        <h1>&nbsp;&nbsp;<strong>Comentários sobre Ilhabela</strong>
           <button onClick={handleCommentsPage} className="btn-redirect1">Ver Comentários por Localização&nbsp;&nbsp;</button>
           <button onClick={handleDashboardPage} className="btn-redirect2">Dashboard de Estatísticas&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button></h1>
+          <h3><br />&nbsp;&nbsp;Para adicionar um comentário basta clicar em uma região do mapa.</h3>
       </header>
 
       {/* Conteúdo principal: Sidebar e Mapa */}
       <div style={{ display: 'flex' }}>
         {/* Sidebar para exibir todos os comentários */}
-        <div className="moldura-lateral" style={{ width: '300px', padding: '10px', overflowY: 'scroll' }}>
-          <h3><strong>Comentários</strong></h3>
+        <div className="moldura-lateral" style={{ width: '300px', padding: '20px', overflowY: 'scroll' }}>
           <ul>
             {comments.map((comment, index) => (
               <li key={index} style={{ marginBottom: '10px' }}>
                 <strong>Assunto:</strong> {comment.tag} <br />
-                <strong>Comentário:</strong> {comment.texto || comment.text}
+                <strong>Comentário:</strong> {comment.texto || comment.text} <br />
               </li>
             ))}
           </ul>
@@ -154,9 +157,7 @@ const MapView = () => {
 
       {/* Formulário para novo comentário */}
       {showForm && (
-        <div className="comment" style={{
-          position: 'absolute', backgroundColor: 'white', padding: '10px', zIndex: 1
-        }}>
+        <div className="comment">
           <h3>Novo Comentário</h3>
           <form onSubmit={handleFormSubmit}>
             <label>
@@ -166,7 +167,7 @@ const MapView = () => {
                 onChange={(e) => setNewComment({ ...newComment, tag: e.target.value })}
                 required
               >
-                <option value="">Selecione</option>
+                <option value="">Selecione a tag (assunto)</option>
                 <option value="saude">Saúde</option>
                 <option value="segurança">Segurança</option>
                 <option value="ambiental">Ambiental</option>
@@ -174,7 +175,7 @@ const MapView = () => {
                 <option value="outros">Outros</option>
               </select>
             </label>
-            <br />
+
             <label>
               Comentário:
               <textarea
@@ -183,7 +184,55 @@ const MapView = () => {
                 required
               />
             </label>
-            <br />
+ 
+            <label>
+              Bairro:
+              <select
+                value={newComment.bairro}
+                onChange={(e) => setNewComment({ ...newComment, bairro: e.target.value })}
+                required
+              >
+                <option value="">Selecione o Bairro</option>
+                {/* Regiões do lado oeste */}
+                <optgroup label="Regiões do lado oeste (voltadas para o continente)">
+                  <option value="Barra Velha">Barra Velha</option>
+                  <option value="Perequê">Perequê</option>
+                  <option value="Vila (Centro Histórico)">Vila (Centro Histórico)</option>
+                  <option value="Saco da Capela">Saco da Capela</option>
+                  <option value="Itaquanduba">Itaquanduba</option>
+                  <option value="Itaguaçu">Itaguaçu</option>
+                  <option value="Engenho D’Água">Engenho D’Água</option>
+                  <option value="Siriúba">Siriúba</option>
+                  <option value="Viana">Viana</option>
+                  <option value="Santa Tereza">Santa Tereza</option>
+                  <option value="Piúva">Piúva</option>
+                </optgroup>
+                {/* Regiões do lado sul */}
+                <optgroup label="Regiões do lado sul">
+                  <option value="Praia Grande">Praia Grande</option>
+                  <option value="Praia do Curral">Praia do Curral</option>
+                  <option value="Borrifos">Borrifos</option>
+                  <option value="Veloso">Veloso</option>
+                  <option value="Cambaquara">Cambaquara</option>
+                </optgroup>
+                {/* Regiões do lado norte */}
+                <optgroup label="Regiões do lado norte">
+                  <option value="Armação">Armação</option>
+                  <option value="Ponta Azeda">Ponta Azeda</option>
+                  <option value="Ponta das Canas">Ponta das Canas</option>
+                  <option value="Jabaquara">Jabaquara</option>
+                  <option value="Pacuíba">Pacuíba</option>
+                </optgroup>
+                {/* Regiões do lado leste */}
+                <optgroup label="Regiões do lado leste (acessível por trilhas ou barcos)">
+                  <option value="Castelhanos">Castelhanos</option>
+                  <option value="Bonete">Bonete</option>
+                  <option value="Praia do Eustáquio">Praia do Eustáquio</option>
+                  <option value="Praia de Indaiaúba">Praia de Indaiaúba</option>
+                </optgroup>
+              </select>
+            </label>            
+         
             <button type="submit">Salvar</button>
             <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
           </form>
