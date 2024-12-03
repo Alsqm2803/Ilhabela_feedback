@@ -21,7 +21,7 @@
     "dev": "nodemon server.js" 
   },
   "engines": {
-    "node": "14.x"
+    "node": "22.x"
   },
   "author": "Ana Laura Siqueira Miranda",
   "license": "MIT"
