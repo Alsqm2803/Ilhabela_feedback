@@ -28,7 +28,7 @@ function authRoutes(db) {
     try {
       const user = await db.collection('users').findOne({ email });
       if (user && await bcrypt.compare(senha, user.senha)) {
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
         res.json({ token });
       } else {
         res.status(401).json({ error: 'Credenciais inválidas' });
