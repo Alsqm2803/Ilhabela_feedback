@@ -37,7 +37,7 @@ const MapView = () => {
 
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/satellite-v9',
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: [-45.33, -23.82],
       zoom: 11
     });
