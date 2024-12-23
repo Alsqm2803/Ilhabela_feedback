@@ -42,6 +42,10 @@ const Dashboard = () => {
     return tagMatch && neighborhoodMatch;
   });
 
+  // Paleta de cores personalizada (floresta e mar)
+  const customColors = ['#2E8B57', '#4682B4', '#66CDAA', '#20B2AA', '#5F9EA0'];
+  const customHoverColors = ['#3CB371', '#5F9EA0', '#76EEC6', '#48D1CC', '#7FFFD4'];
+
   const tagData = {
     labels: tags.map((tag) => tag.label),
     datasets: [
@@ -51,8 +55,8 @@ const Dashboard = () => {
           (tag) =>
             filteredComments.filter((comment) => comment.tag === tag.value).length
         ),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        backgroundColor: customColors,
+        hoverBackgroundColor: customHoverColors,
       },
     ],
   };
@@ -82,8 +86,8 @@ const Dashboard = () => {
           (bairro) =>
             filteredComments.filter((comment) => comment.bairro === bairro.value).length
         ),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        backgroundColor: customColors,
+        hoverBackgroundColor: customHoverColors,
       },
     ],
   };
@@ -118,9 +122,10 @@ const Dashboard = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h2>Dashboard de Comentários</h2>
-      <p>Aqui você pode visualizar e filtrar os comentários.</p>
+      <h2 style={{ textAlign: 'center' }}>Dashboard de Comentários</h2>
+      <p style={{ textAlign: 'center' }}>Aqui você pode visualizar e filtrar os comentários.</p>
 
+      {/* Filtros */}
       <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
         <div style={{ flex: 1 }}>
           <label>Filtrar por Tags:</label>
@@ -144,25 +149,39 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <table border="1" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
+      {/* Tabela */}
+      <table
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          marginBottom: '20px',
+          textAlign: 'left',
+        }}
+      >
         <thead>
-          <tr>
-            <th>Comentário</th>
-            <th>Bairro</th>
-            <th>Tag</th>
+          <tr style={{ backgroundColor: '#2E8B57', color: '#FFF' }}>
+            <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>Comentário</th>
+            <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>Bairro</th>
+            <th style={{ padding: '10px', borderBottom: '2px solid #ddd' }}>Tag</th>
           </tr>
         </thead>
         <tbody>
           {filteredComments.map((comment) => (
-            <tr key={comment._id}>
-              <td>{comment.texto}</td>
-              <td>{comment.bairro}</td>
-              <td>{comment.tag}</td>
+            <tr key={comment._id} style={{ backgroundColor: '#f9f9f9' }}>
+              <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
+                {comment.texto}
+              </td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
+                {comment.bairro}
+              </td>
+              <td style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>
+                {comment.tag}
+              </td>
             </tr>
           ))}
           {filteredComments.length === 0 && (
             <tr>
-              <td colSpan="3" style={{ textAlign: 'center' }}>
+              <td colSpan="3" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
                 Nenhum comentário encontrado.
               </td>
             </tr>
@@ -170,20 +189,21 @@ const Dashboard = () => {
         </tbody>
       </table>
 
+      {/* Gráficos */}
       <div style={{ display: 'flex', gap: '20px', justifyContent: 'space-around' }}>
-        <div style={{ width: '45%' }}>
-          <h3>Distribuição por Tags</h3>
+        <div style={{ width: '300px', height: '300px' }}>
+          <h3 style={{ textAlign: 'center' }}>Distribuição por Tags</h3>
           <Pie data={tagData} options={tagOptions} />
         </div>
-        <div style={{ width: '45%' }}>
-          <h3>Distribuição por Bairros</h3>
+        <div style={{ width: '300px', height: '300px' }}>
+          <h3 style={{ textAlign: 'center' }}>Distribuição por Bairros</h3>
           <Pie data={neighborhoodData} options={neighborhoodOptions} />
         </div>
       </div>
-
-      <button onClick={handleBackToMap} style={{ marginTop: '20px' }}>
+      <button className="btn-logout" onClick={handleBackToMap}>
         Voltar para o Mapa
       </button>
+
     </div>
   );
 };
