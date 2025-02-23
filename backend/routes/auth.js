@@ -39,13 +39,11 @@ function authRoutes(db) {
     }
   });
 
-  // Rota para recuperação de senha
   router.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
     console.log('Início da recuperação de senha para:', email);
 
     try {
-      // Verifica se o email existe no banco de dados
       const user = await db.collection('users').findOne({ email });
       console.log('Usuário encontrado:', user ? 'Sim' : 'Não');
 
@@ -54,35 +52,30 @@ function authRoutes(db) {
         return res.status(404).json({ error: 'Email não encontrado' });
       }
 
-      // Gera uma nova senha aleatória
-      const newPassword = crypto.randomBytes(6).toString('hex'); // 12 caracteres
+      const newPassword = crypto.randomBytes(6).toString('hex'); 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       console.log(newPassword);
       console.log('Nova senha gerada (hashado):', hashedPassword);
 
-      // Atualiza a senha no banco de dados
       await db.collection('users').updateOne(
         { email },
         { $set: { senha: hashedPassword } }
       );
       console.log('Senha atualizada no banco para o email:', email);
 
-      // Recupera o documento atualizado para verificar a senha no banco
       const updatedUser = await db.collection('users').findOne({ email });
       console.log('Documento atualizado no banco:', updatedUser);
 
-      // Configura o transporte de email
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT, 10), // Garante que a porta seja um número
-        secure: process.env.SMTP_PORT === '465', // SSL para porta 465, caso contrário use TLS
+        port: parseInt(process.env.SMTP_PORT, 10), 
+        secure: process.env.SMTP_PORT === '465', 
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
         },
       });
 
-      // Configura e envia o email
       const mailOptions = {
         from: `"Recuperação de Senha" <${process.env.SMTP_USER}>`,
         to: email,
