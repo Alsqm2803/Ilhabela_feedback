@@ -9,9 +9,13 @@ JavaScript, HTML, CSS, Node.js, MongoDB ...
 🎯 Funcionalidades
 
 ✅ Permite que os usuários relatem problemas ou sugestões
+
 ✅ Comentários são associados a uma localização no mapa
+
 ✅ Interface simples e intuitiva
+
 ✅ Autenticação de usuários
+
 ✅ Dashboard com estatísticas
 
 🌍 Acesse o Projeto
